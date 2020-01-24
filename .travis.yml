@@ -1,0 +1,22 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t fneyz/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run fneyz/react-test npm run test -- --coverage --watchAll=false
+
+after_success:
+    - docker build -t fneyz/multi-client ./client
+    - docker build -t fneyz/multi-nginx ./nginx
+    - docker build -t fneyz/multi-server ./server
+    - docker build -t fneyz/multi-worker ./worker
+
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-sdin
+
+    - docker push fneyz/multi-client
+    - docker push fneyz/multi-nginx
+    - docker push fneyz/multi-server
+    - docker push fneyz/multi-worker
