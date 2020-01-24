@@ -14,7 +14,7 @@ after_success:
     - docker build -t fneyz/multi-server ./server
     - docker build -t fneyz/multi-worker ./worker
 
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-sdin
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
     - docker push fneyz/multi-client
     - docker push fneyz/multi-nginx
