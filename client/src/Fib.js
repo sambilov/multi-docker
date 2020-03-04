@@ -14,15 +14,17 @@ export default class Fib extends Component {
     }
 
     async fetchValues() {
-        const values = await axios.get('api/values/current');
+        const response = await axios.get('api/values/current');
+        const values = typeof response.data === 'object' ? response.data : {};
 
-        this.setState({ values: values.data });
+        this.setState({ values });
     }
 
     async fetchIndexes() {
-        const seenIndexes = await axios.get('api/values/all');
+        const response = await axios.get('api/values/all');
+        const seenIndexes = Array.isArray(response.data) ? response.data : [];
 
-        this.setState({ seenIndexes: seenIndexes.data });
+        this.setState({ seenIndexes });
     }
 
     handleSubmit = async (event) => {
